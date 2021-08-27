@@ -1,4 +1,4 @@
-import Yelp
+from Yelp import Yelp
 
 #List of visited Resturants
 resto_list = [{'id': 'VGI5GoGLBAucTQGZq4Reww', 'alias': 'model-meals-santa-ana-3', 
@@ -181,8 +181,14 @@ def get_new_inputs():
     distance_miles = int(input("How many miles are you willing to drive?(max 24)\n"))
     distance_meters = distance_miles * 1609
     param_dict['radius'] = distance_meters
-    price = input("How pricey from 1-4?(1 = cheapest, 4 = most expenive")
-    param_dict['price'] = price
+    price = int(input("How pricey from 1-4?(1 = cheapest, 4 = most expenive"))
+    price_str = ''
+    for i in range(1, price + 1):
+        if i != price:
+            price_str += str(i) + ', '
+        else:
+            price_str += str(i)
+    param_dict['price'] = price_str
     param_dict['open_now'] = True
     attributes = ""
     trendy = input("Something trendy?(Press Y or N)\n")
