@@ -19,14 +19,14 @@ class Yelp:
     ENDPOINT = 'https://api.yelp.com/v3/businesses/matches'
     HEADERS = {'Authorization': 'bearer %s' % API_KEY}
 
-    def businessSearch(param_dict):
+    def businessSearch(self, param_dict):
         ENDPOINT = 'https://api.yelp.com/v3/businesses/search'
         response = requests.get(url= ENDPOINT, params= param_dict, headers = Yelp.HEADERS)
         #COnvert JSON String to a dictionary
         business_data = response.json()
         return business_data
 
-    def businessMatch(param_dict):
+    def businessMatch(self, param_dict):
         ENDPOINT = 'https://api.yelp.com/v3/businesses/matches'
         response = requests.get(url= ENDPOINT, params= param_dict, headers = Yelp.HEADERS)
         #COnvert JSON String to a dictionary
