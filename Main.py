@@ -244,9 +244,10 @@ def find_new_restaurants(params):
     pickup = params.pop('pickup')
     delivery = params.pop('delivery')
     results = Yelp.businessSearch(params)
-    for result in results['businesses'].copy():
-        if result['id'] in resto_list or (pickup == 'Y' and 'pickup' not in result['transactions']) or (delivery == 'Y' and 'delivery' not in result['transactions']):
-            results['businesses'].remove(result)
+    if 'businesses' in results:
+        for result in results['businesses'].copy():
+            if result['id'] in resto_list or (pickup == 'Y' and 'pickup' not in result['transactions']) or (delivery == 'Y' and 'delivery' not in result['transactions']):
+                results['businesses'].remove(result)
     return results
 
 #Calculate score for each resturant and store as value in dictionary {resturant:score} then sort the dictionary by decending values 
@@ -297,13 +298,19 @@ def find_old_restaurants(params):
 #Filtered resturants will be shown one by one until user decides yes("Y"), then loop will break
 #Resturant data will then be saved in user's visited resturant list
 def display_new_results(results):
-    for result in results['businesses']:
-        print(result['name'], result['image_url'])
-        decision = input('Yes or No?(Press Y or N)')
-        if decision == 'Y':
-            resto_list.append(result)
-            print(resto_list)
-            break
+    if 'error' in results:
+        print(results['error']['code'])
+        print(results['error']['description'])
+    elif results['businesses']:
+        for result in results['businesses']:
+            print(result['name'], result['image_url'])
+            decision = input('Yes or No?(Press Y or N)')
+            if decision == 'Y':
+                resto_list.append(result)
+                print(resto_list)
+                break
+    else:
+        print('Empty. Try again.')
 
 #Filtered resturants will be shown one by one, in the order of the sorted decending value dictionary, until user decides yes("Y"), then loop will break
 def display_old_results(results):

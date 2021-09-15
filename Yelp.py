@@ -8,6 +8,7 @@
 
 
 #Import the modules
+import os
 import requests
 class Yelp:
 
@@ -15,18 +16,18 @@ class Yelp:
     business_id = ''
 
     # Define the API Key, Define the Endpoint, and define the Header
-    API_KEY = 'M4f1Qxts3zYODeAbfc98Ws_j5KDz0ASfJjBSbRWMg9XDFIqFEkyUilNPO3FX6CprpZBpYx4UADL0aV91kto1QdYOPx-nIvni6BSsEzO7SipZNoUt7cJPVcQgOfEeYXYx'
+    API_KEY = os.getenv('API_KEY')
     ENDPOINT = 'https://api.yelp.com/v3/businesses/matches'
     HEADERS = {'Authorization': 'bearer %s' % API_KEY}
 
-    def businessSearch(self, param_dict):
+    def businessSearch(param_dict):
         ENDPOINT = 'https://api.yelp.com/v3/businesses/search'
         response = requests.get(url= ENDPOINT, params= param_dict, headers = Yelp.HEADERS)
         #COnvert JSON String to a dictionary
         business_data = response.json()
         return business_data
 
-    def businessMatch(self, param_dict):
+    def businessMatch(param_dict):
         ENDPOINT = 'https://api.yelp.com/v3/businesses/matches'
         response = requests.get(url= ENDPOINT, params= param_dict, headers = Yelp.HEADERS)
         #COnvert JSON String to a dictionary
