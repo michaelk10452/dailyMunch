@@ -1,4 +1,4 @@
-from Yelp import Yelp
+from yelp import Yelp
 
 #List of visited Resturants
 resto_list = [{'id': 'VGI5GoGLBAucTQGZq4Reww', 'alias': 'model-meals-santa-ana-3', 
