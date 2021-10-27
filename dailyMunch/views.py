@@ -3,7 +3,6 @@ from dailyMunch.forms import *
 from yelp import Yelp
 
 # Create your views here.
-
 def index(request):
     context = {}
     if request.method != 'POST':
@@ -35,3 +34,6 @@ def index(request):
             context['results'] = results['businesses']
         context['form'] = form
     return render(request, 'dailyMunch/index.html', context)
+
+def about(request):
+    return render(request, 'dailyMunch/about.html')

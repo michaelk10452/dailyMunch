@@ -20,5 +20,6 @@ from dailyMunch import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('registration.backends.default.urls')),
-    path('', views.index)
+    path('', views.index),
+    path('about/', views.about)
 ]

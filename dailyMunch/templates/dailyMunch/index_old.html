@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{%if results%}
+<h1>Results</h1>
+<ul>
+{%for result in results%}
+<li><a href="{{result.url}}" target="_blank"><img src="{{result.image_url}}" style="height: 50px; width: auto;"> {{result.name}}</a> : {{result.phone}}</li>
+{%endfor%}
+</ul>
+{%endif%}
+<h1>Preferences</h1>
+<form method="POST">
+{%csrf_token%}
+{{form.as_p}}
+<button>submit</button>
+</form>
+{% endblock %}
