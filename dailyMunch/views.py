@@ -9,8 +9,9 @@ def index(request):
         context['form'] = NewSearchForm()
     else:
         form = NewSearchForm(request.POST)
-        if form.is_valid():
-            print(form.cleaned_data)
+        print(request.POST)
+        if "submit" in request.POST.get("action") and form.is_valid():
+            # print("********************************************", form.cleaned_data)
             attrs = []
             if form.cleaned_data.get('trendy'):
                 attrs.append('hot_and_new')
@@ -24,14 +25,26 @@ def index(request):
                 'open_now': form.cleaned_data.get('open_now'),
                 'attributes': ', '.join(attrs)
             }
-            print(yelp_params)
+            # print(yelp_params)
             results = Yelp.businessSearch(yelp_params)
-            print(results)
+            # print(results)
             if 'businesses' in results:
                 for result in results['businesses'].copy():
                     if (form.cleaned_data.get('pickup') and 'pickup' not in result['transactions']) or (form.cleaned_data.get('delivery') and 'delivery' not in result['transactions']): #result['id'] in resto_list or
                         results['businesses'].remove(result)
-            context['results'] = results['businesses']
+            # context['results'] = results['businesses']
+            request.session["results"] = results['businesses']
+            context["result"] = request.session["results"].pop(0)
+            request.session.modified = True
+        elif "no" in request.POST.get("action"):
+            if request.session["results"]:
+                context["result"] = request.session["results"].pop(0)
+                request.session.modified = True
+            else:
+                context["result"] = False
+        elif "yes" in request.POST.get("action"):
+            pass
+        print(request.session["results"])
         context['form'] = form
     return render(request, 'dailyMunch/index.html', context)
 

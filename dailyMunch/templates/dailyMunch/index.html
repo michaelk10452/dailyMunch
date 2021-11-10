@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{%if results%}
-<h1>Results</h1>
-<ul>
-{%for result in results%}
-<li><a href="{{result.url}}" target="_blank"><img src="{{result.image_url}}" style="height: 50px; width: auto;"> {{result.name}}</a> : {{result.phone}}</li>
-{%endfor%}
-</ul>
-{%endif%}
-<h1>Preferences</h1>
 <form method="POST">
-{%csrf_token%}
-{{form.as_p}}
-<button>submit</button>
+{% if result %}
+<h1>Result</h1>
+<ul>
+<li><a href="{{result.url}}" target="_blank"><img src="{{result.image_url}}" style="height: 50px; width: auto;"> {{result.name}}</a> : {{result.phone}}</li>
+</ul>
+<button type="submit" name="action" value="yes">YES</button> <button type="submit" name="action" value="no">NO</button>
+{% elif result == False %}
+<p>You didn't like any of my suggestions :( Please make a new search</p>
+{% endif %}
+<h1>Preferences</h1>
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit" name="action" value="submit">submit</button>
 </form>
 {% endblock %}
