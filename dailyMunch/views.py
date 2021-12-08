@@ -1,5 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 from dailyMunch.forms import *
+from dailyMunch.models import *
 from yelp import Yelp
 
 # Create your views here.
@@ -34,7 +37,8 @@ def index(request):
                         results['businesses'].remove(result)
             # context['results'] = results['businesses']
             request.session["results"] = results['businesses']
-            context["result"] = request.session["results"].pop(0)
+            request.session["result"] = request.session["results"].pop(0)
+            context["result"] = request.session["result"]
             request.session.modified = True
         elif "no" in request.POST.get("action"):
             if request.session["results"]:
@@ -43,10 +47,28 @@ def index(request):
             else:
                 context["result"] = False
         elif "yes" in request.POST.get("action"):
-            pass
-        print(request.session["results"])
+            if request.user.get_username():
+                print('user is logged in')
+
+            else:
+                return redirect(reverse('addrestaurant'))
+                #Needs to redirect ot page where user can either log in or create an account dong so without losing the restaurant they clicked yes on
+        # print(request.session["results"])
         context['form'] = form
     return render(request, 'dailyMunch/index.html', context)
 
+
+
 def about(request):
     return render(request, 'dailyMunch/about.html')
+
+
+
+@login_required
+def addrestaurant(request):
+    pass
+    # extract yelp id from your request.session['result]
+    # check if yelp id exists in restaurant table
+        # Restaurant.objects.filter(yelp_id=current_yelp_id)
+    # check if above query has any results, if empty set then add the new restaurant to the Restaurant table
+    # check if restaurant has not been visited by User then link that Restaurant to the currrent User
