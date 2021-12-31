@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('registration.backends.default.urls')),
     path('', views.index),
+    path('addrestaurant/', views.addrestaurant, name='addrestaurant'),
     path('about/', views.about)
 ]
