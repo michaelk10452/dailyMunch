@@ -22,5 +22,6 @@ urlpatterns = [
     path('accounts/', include('registration.backends.default.urls')),
     path('', views.index),
     path('addrestaurant/', views.addrestaurant, name='addrestaurant'),
-    path('about/', views.about)
+    path('about/', views.about),
+    path('dashboard/', views.dashboard, name='dashboard'),
 ]

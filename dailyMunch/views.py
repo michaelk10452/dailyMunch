@@ -1,6 +1,8 @@
+from django.dispatch import receiver
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from registration.signals import user_registered
 from dailyMunch.forms import *
 from dailyMunch.models import *
 from yelp import Yelp
@@ -28,6 +30,17 @@ def index(request):
                 'open_now': form.cleaned_data.get('open_now'),
                 'attributes': ', '.join(attrs)
             }
+            request.session['form'] = {
+                'keyword': form.cleaned_data.get('search_term'),
+                'location': form.cleaned_data.get('location'),
+                'distance_miles': form.cleaned_data.get('distance'),
+                'price': form.cleaned_data.get('price'),
+                'open_now': form.cleaned_data.get('open_now'),
+                'trendy': form.cleaned_data.get('trendy'),
+                'reservation': form.cleaned_data.get('reservation'),
+                'pickup' : form.cleaned_data.get('pickup'),
+                'delivery': form.cleaned_data.get('delivery'),
+            }
             # print(yelp_params)
             results = Yelp.businessSearch(yelp_params)
             # print(results)
@@ -42,16 +55,13 @@ def index(request):
             request.session.modified = True
         elif "no" in request.POST.get("action"):
             if request.session["results"]:
-                context["result"] = request.session["results"].pop(0)
+                request.session["result"] = request.session["results"].pop(0)
+                context["result"] = request.session["result"]                
                 request.session.modified = True
             else:
                 context["result"] = False
         elif "yes" in request.POST.get("action"):
-            if request.user.get_username():
-                print('user is logged in')
-
-            else:
-                return redirect(reverse('addrestaurant'))
+            return redirect(reverse('addrestaurant'))
                 #Needs to redirect ot page where user can either log in or create an account dong so without losing the restaurant they clicked yes on
         # print(request.session["results"])
         context['form'] = form
@@ -62,13 +72,35 @@ def index(request):
 def about(request):
     return render(request, 'dailyMunch/about.html')
 
-
+@login_required
+def dashboard(request):
+    return render(request, 'dailyMunch/dashboard.html')
 
 @login_required
 def addrestaurant(request):
-    pass
-    # extract yelp id from your request.session['result]
-    # check if yelp id exists in restaurant table
-        # Restaurant.objects.filter(yelp_id=current_yelp_id)
-    # check if above query has any results, if empty set then add the new restaurant to the Restaurant table
-    # check if restaurant has not been visited by User then link that Restaurant to the currrent User
+    print(request.session['result'])
+    current_yelp_id = request.session['result']['id']
+    restaurant, created = Restaurant.objects.get_or_create(yelp_id=current_yelp_id, defaults={'data': request.session['result']})
+    visited = Visited(user=request.user, restaurant=restaurant)
+    visited.save()
+    #user data is updated and ready to be pre-loaded for next query
+    Profile.objects.filter(user=request.user).update(**request.session['form'])
+    return redirect(reverse('dashboard'))
+    # TODO: Load the profile inot the form if the user is logged in
+    # TODO: Create fucntionality for choosing a resturant from restaurants that have already been visited
+    # TODO: If they want to choose a new restuartans and they are logged in then we need to filter out restuarants that they've visted
+    # TODO: Display last few restaurants on Dahsboard
+    # TODO: Having link that user can click on to take them to new query
+
+@receiver(user_registered)
+def new_user(sender, user, request, **kwargs):
+    form = request.session.get('form')
+    if form is not None:
+        profile = Profile.objects.create(user=user, **form)
+        current_yelp_id = request.session['result']['id']
+        restaurant, created = Restaurant.objects.get_or_create(yelp_id=current_yelp_id, defaults={'data': request.session['result']})
+        visited = Visited.objects.create(user=user, restaurant=restaurant)
+    else:
+        profile = Profile.objects.create(user=user)
+
+

@@ -129,3 +129,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Django Registration redux settings
 ACCOUNT_ACTIVATION_DAYS = 7
+EMAIL_SUBJECT_PREFIX = '[DailyMunch]' # CHANGE this to identify each client's error messages
+SERVER_EMAIL = 'michaelk1599@gmail.com'
+EMAIL_USE_LOCALTIME = True
+EMAIL_HOST_USER = 'michaelk1599@gmail.com' # Do NOT change
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend' # Save email as a file
+    EMAIL_FILE_PATH = '/Users/michaelkurdahi/Desktop/dailyMunch/temp'
+else:
+    EMAIL_USE_TLS = True
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+

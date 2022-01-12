@@ -1,0 +1,84 @@
+Content-Type: multipart/alternative;
+ boundary="===============2223110208158661445=="
+MIME-Version: 1.0
+Subject: Account activation on 127.0.0.1:8000
+From: webmaster@localhost
+To: test@test.com
+Date: Wed, 12 Jan 2022 22:03:49 +0000
+Message-ID: <164202502919.58600.12793156568027968356@1.0.0.127.in-addr.arpa>
+
+--===============2223110208158661445==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+
+
+You (or someone pretending to be you) have asked to register an account at
+127.0.0.1:8000.  If this wasn't you, please ignore this email
+and your address will be removed from our records.
+
+
+To activate this account, please click the following link within the next
+7 days:
+
+
+http://127.0.0.1:8000/accounts/activate/2b9fb9fdda73a29ebb519c6414b698aec807f0f55f9ec4edc4be9577c042727d/
+
+
+Sincerely,
+127.0.0.1:8000 Management
+
+
+
+
+
+--===============2223110208158661445==
+Content-Type: text/html; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>127.0.0.1:8000 registration</title>
+</head>
+
+<body>
+<p>
+    
+    You (or someone pretending to be you) have asked to register an account at
+    127.0.0.1:8000.  If this wasn't you, please ignore this email
+    and your address will be removed from our records.
+    
+</p>
+<p>
+    
+    To activate this account, please click the following link within the next
+    7 days:
+    
+</p>
+
+<p>
+    <a href="http://127.0.0.1:8000/accounts/activate/2b9fb9fdda73a29ebb519c6414b698aec807f0f55f9ec4edc4be9577c042727d/">
+        127.0.0.1:8000/accounts/activate/2b9fb9fdda73a29ebb519c6414b698aec807f0f55f9ec4edc4be9577c042727d/
+    </a>
+</p>
+<p>
+    
+    Sincerely,
+    127.0.0.1:8000 Management
+    
+</p>
+</body>
+
+</html>
+
+
+
+
+--===============2223110208158661445==--
+
+-------------------------------------------------------------------------------
