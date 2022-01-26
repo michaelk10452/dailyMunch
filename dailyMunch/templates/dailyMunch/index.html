@@ -11,7 +11,7 @@
 {% elif result == False %}
 <p>You didn't like any of my suggestions :( Please make a new search</p>
 {% endif %}
-<h1>Preferences</h1>
+<h1>Let's find somewhere new to eat</h1>
 {% csrf_token %}
 {{ form.as_p }}
 <button type="submit" name="action" value="submit">submit</button>

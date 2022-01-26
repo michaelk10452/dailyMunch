@@ -2,4 +2,19 @@
 
 {% block content %}
 <h1>Dashboard</h1>
+<h2>Categories</h2>
+<ul>
+{% for category, stats in categories.items %}
+    <li><a href="{% url 'dashboard' %}?category={{ category|urlencode }}">{{ category }}</a>, restaurants: {{stats.restaurants}}, visits: {{stats.visits}}</li>
+{% endfor %}
+</ul>
+
+{% if "category" in request.GET %}
+<h2>Restaurants in {{ request.GET.category }}</h2>
+<ul>
+{% for result in category_restaurants %}
+    <li><a href="{{result.url}}" target="_blank"><img src="{{result.image_url}}" style="height: 50px; width: auto;"> {{result.name}}</a> : {{result.phone}}</li>
+{% endfor %}
+</ul>
+{% endif %}
 {% endblock %}
