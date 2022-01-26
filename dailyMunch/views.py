@@ -12,10 +12,11 @@ from yelp import Yelp
 def index(request):
     context = {}
     if request.method != 'POST':
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and Profile.objects.get(user=request.user).keyword != '':
             profile = model_to_dict(Profile.objects.get(user=request.user))
             print(profile)
             profile.pop('user')
+
             context['form'] = NewSearchForm(profile)
         else:
             context['form'] = NewSearchForm()
