@@ -59,23 +59,30 @@ def index(request):
                         results['businesses'].remove(result)
             # context['results'] = results['businesses']
             request.session["results"] = results['businesses']
-            result = request.session["results"].pop(0)
-            if request.user.is_authenticated:
-                visiteds = Visited.objects.filter(user=request.user)
-                yelp_ids = {v.restaurant.yelp_id for v in visiteds}
-                while result['id'] in yelp_ids:
-                    result = request.session["results"].pop(0)
-            request.session["result"] = result
-            context["result"] = result
-            request.session.modified = True
+            if not request.session["results"]:
+                context['no_results'] = True
+            else:
+                result = request.session["results"].pop(0)
+                if request.user.is_authenticated:
+                    visiteds = Visited.objects.filter(user=request.user)
+                    yelp_ids = {v.restaurant.yelp_id for v in visiteds}
+                    while result['id'] in yelp_ids and request.session["results"]:
+                        result = request.session["results"].pop(0)
+                    if result['id'] in yelp_ids:
+                        context['no_results'] = True
+                request.session["result"] = result
+                context["result"] = result
+                request.session.modified = True
         elif "no" in request.POST.get("action"):
             if request.session["results"]:
                 result = request.session["results"].pop(0)
                 if request.user.is_authenticated:
                     visiteds = Visited.objects.filter(user=request.user)
                     yelp_ids = {v.restaurant.yelp_id for v in visiteds}
-                    while result['id'] in yelp_ids:
+                    while result['id'] in yelp_ids and request.session["results"]:
                         result = request.session["results"].pop(0)
+                    if result['id'] in yelp_ids:
+                        context['no_results'] = True
                 request.session["result"] = result
                 context["result"] = result              
                 request.session.modified = True
@@ -123,8 +130,8 @@ def addrestaurant(request):
     # TODO: When displaying old restaurants sort by number of times they've been visited
     # TODO: Put data in a table
     # TODO: Sort by visits
-    # TODO: Host the site
     # TODO: Make Footer and Tags better
+    
 
 @receiver(user_registered)
 def new_user(sender, user, request, **kwargs):

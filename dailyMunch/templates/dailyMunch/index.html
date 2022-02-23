@@ -2,7 +2,9 @@
 
 {% block content %}
 <form method="POST">
-{% if result %}
+{% if no_results %}
+<p>Couldn't find any restaurants, please try a new search</p>
+{% elif result %}
 <h1>Result</h1>
 <ul>
 <li><a href="{{result.url}}" target="_blank"><img src="{{result.image_url}}" style="height: 50px; width: auto;"> {{result.name}}</a> : {{result.phone}}</li>
